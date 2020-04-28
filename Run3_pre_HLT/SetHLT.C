@@ -31,8 +31,8 @@ vector<string> trglist = {"triggerList_mu.txt","triggerList_eg.txt"};
 TString selPO[nPO] = {"Muon", "E/Gamma"};
 vector<int> trig;
 TBranch *b_trig[MAXBRANCH];
-int MBTrigline = -1;
-const char* MBTrigName = "HLT_HIMinimumBias_SinglePixelTrack_NpixBypass_part0_v1";
+int MBTrigline1 = -1;
+int MBTrigline2 = -1;
 
 void SetHLT(TTree *tree = 0, int isel = 0){
   cout << endl;
@@ -54,16 +54,19 @@ void SetHLT(TTree *tree = 0, int isel = 0){
   cout << "Reading trigger list line" << endl;
   cout << "..." << endl;
   int linecounter=0;
+  const char* MBTrigName1 = "HLT_HIMinimumBias_SinglePixelTrack_NpixBypass_part2_v1";
+  const char* MBTrigName2 = "HLT_HIMinimumBias_SinglePixelTrack_NpixGated_part2_v1";
   while (getline(trgfile, line))
   {
     trigname.push_back(line);
-    if(line.find(Form("%s",MBTrigName)) !=string::npos){MBTrigline = linecounter;}
+    if(line.find(Form("%s",MBTrigName1)) !=string::npos){MBTrigline1 = linecounter;}
+    if(line.find(Form("%s",MBTrigName2)) !=string::npos){MBTrigline2 = linecounter;}
     linecounter++;
   }
   cout << endl; cout << endl;
   cout << "Done" << endl;
-  cout << "MB Trigger line number : " << MBTrigline << endl;
-  if(MBTrigline==-1){cout << "ERROR!! No matching MB trigger in the list" << endl;}
+  cout << "MB Trigger line number for Bypass : " << MBTrigline1 << " -- for Gated : " << MBTrigline2 << endl;
+  if(MBTrigline1==-1 || MBTrigline2==-1){cout << "ERROR!! No matching MB trigger in the list" << endl;}
   
   cout << "Resize trigger int variable" << endl;
   trig.resize(trigname.size(),0);
