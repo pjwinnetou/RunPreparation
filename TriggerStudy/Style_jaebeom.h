@@ -219,6 +219,14 @@ void SetGraphStyleSys2(TGraph* gr, Int_t c) {
   gr-> SetLineWidth(1);
 }
 
+void drawGlobText(const char *text, float xp, float yp, int textColor=kBlack, double textSize=0.04) {
+  TLatex* globtex = new TLatex();
+  globtex->SetNDC();
+  globtex->SetTextAlign(12); //left-center
+  globtex->SetTextFont(42);
+  globtex->SetTextSize(textSize);
+  globtex->DrawLatex(xp, yp, text);
+}
 
 void SetLegendStyle(TLegend* l) {
   l->SetFillColor(0);
@@ -253,9 +261,10 @@ TH1D *getHistRatio(TH1 *h1, TH1 *h2){
 
 TCanvas *makeHistRatioCanvas(TH1* h0, TH1 *h1, TH1 *h2, double rup, double rdo, bool logopt){
   TCanvas* c1 = new TCanvas(Form("c_%s",h0->GetName()),"",700,700);
+
   SetHistStyle(h1, 0, 0);
   SetHistStyle(h2, 1, 1);
-  SetHistStyle(h0, 1, 1);
+  SetHistStyle(h0, 1, 3);
   h0->SetMarkerColor(kRed);
   h0->GetYaxis()->SetLimits(rdo, rup);
   h0->GetYaxis()->SetRangeUser(rdo, rup);
