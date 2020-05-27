@@ -22,6 +22,8 @@
 #include <TLegend.h>
 #include <iostream>
 #include <vector>
+#include <TTreeReaderValue.h>
+#include <TTreeReader.h>
 
 using namespace std;
 
@@ -51,6 +53,15 @@ void setbins(int ivar){
   else if(ivar==1) bins=etabins;
   else if(ivar==2) bins=phibins;
   else if(ivar==3) bins=massbins;
+};
+
+bool CheckValue(ROOT::Internal::TTreeReaderValueBase& value) {
+  if (value.GetSetupStatus() < 0) {
+    std::cerr << "Error " << value.GetSetupStatus()
+      << "setting up reader for " << value.GetBranchName() << '\n';
+    return false;
+  }
+  return true;
 };
 
 

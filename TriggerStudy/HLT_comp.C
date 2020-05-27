@@ -33,8 +33,8 @@ void makeDir(TFile* f1, const string dir)
 
 void HLT_comp(){
 
-  TFile* f1 = new TFile("/eos/cms/store/group/phys_heavyions/anstahll/HLT2021/TREE/OpenHLTTree_HIMinBias_103X_dataRun2_HLT_Run327237.root","OPEN");
-  TFile* f2 = new TFile("/eos/cms/store/group/phys_heavyions/anstahll/HLT2021/TREE/OpenHLTTree_HIMinBias_103X_dataRun2_HLT_ForHITestsV3_Run327237.root","OPEN");
+  TFile* f1 = new TFile("/eos/cms/store/group/phys_heavyions/anstahll/HLT2021/TREE/OpenHLTTree_HIMinBias_103X_dataRun2_HLT_NoZS_20200521.root","OPEN");
+  TFile* f2 = new TFile("/eos/cms/store/group/phys_heavyions/anstahll/HLT2021/TREE/OpenHLTTree_HIMinBias_103X_dataRun2_HLT_ForHITestsV3_NoZS_20200521.root","OPEN");
 
   triglistfile.open(Form("%s",triglist.c_str()));
 
@@ -52,6 +52,7 @@ void HLT_comp(){
     const string tt = t.substr(0, t.size()-1);
     TTreeReader* OnlineTR = new TTreeReader(Form("hltobject/%s",tt.c_str()), f1);
     TTreeReader* MiscalTR = new TTreeReader(Form("hltobject/%s",tt.c_str()), f2);
+
     int varNum=0;
     for( const auto& var : {"pt", "eta", "phi", "mass"}){
       setbins(varNum);
@@ -65,22 +66,27 @@ void HLT_comp(){
     int ivar=0;
     TDirectory* subdir_ = wf->GetDirectory(t.c_str());
     subdir_->cd();
-    for( const auto& var : {"pt", "eta", "phi", "mass"}){
-      while(OnlineTR->Next()){
-      //for(auto& value : *obj_online.at(tt).at(var)->Get()){
-      //for(int ival=0;ival<obj_online.at(tt).at(var
-      for(auto& value : *obj_online.at(tt).at(var)->Get()){
-        histonline[trigNum][ivar]->Fill(value);
+    while(OnlineTR->Next()){
+      ivar=0;
+      for( const auto& var : {"pt", "eta", "phi", "mass"}){
+        for(auto& value : *obj_online.at(tt).at(var)->Get()){
+          histonline[trigNum][ivar]->Fill(value);
         }
+        ivar++;
       }
-      while(MiscalTR->Next()){
-      for(auto&& value : *obj_miscal.at(tt).at(var)->Get()){
-        histmiscal[trigNum][ivar]->Fill(value);
+    }
+    while(MiscalTR->Next()){
+      ivar=0;
+      for( const auto& var : {"pt", "eta", "phi", "mass"}){
+        for(auto& value : *obj_miscal.at(tt).at(var)->Get()){
+          histmiscal[trigNum][ivar]->Fill(value);
         }
+        ivar++;
       }
-      histonline[trigNum][ivar]->Write(); 
-      histmiscal[trigNum][ivar]->Write(); 
-      ivar++;
+    }
+    for(int is=0;is<4;is++){
+    histonline[trigNum][is]->Write(); 
+    histmiscal[trigNum][is]->Write(); 
     }
     trigNum++;
   }
