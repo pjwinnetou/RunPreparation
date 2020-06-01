@@ -1,5 +1,9 @@
 #include "plotTurnOn.h"
 
+void makeDirFile(TFile *f1, const std::string& dir)
+{
+  TDirectory* subdir = f1->mkdir(dir.c_str());
+};
 
 void plotTurnOn_withsaved()
 {
