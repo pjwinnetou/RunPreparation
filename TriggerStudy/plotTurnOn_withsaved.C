@@ -74,7 +74,7 @@ void plotTurnOn_withsaved()
     recoInfo.initBranches(pTag);
 
     // fill efficiencies
-    const auto nEntries = 10000;//recoInfo.getEntries();
+    const auto nEntries = recoInfo.getEntries();
     for (const auto& iEntry : ROOT::TSeqUL(nEntries)) {
       if ((iEntry%100000)==0) { std::cout << "[INFO] Core " << idx << ":  Processing event " << iEntry << " / " << nEntries << std::endl; }
       recoInfo.setEntry(iEntry, false, true);
