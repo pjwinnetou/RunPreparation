@@ -36,7 +36,7 @@ void SetHLTBitTreeKeyRLE(TTree *tree,  const int nEntries){
     tree->GetEntry(i);
     unsigned long long key0 = keyFromRunLumiEvent(hltval.runN, hltval.lumi, hltval.event);
     runLumiEvtToEntryMap[key0] = i;
-//    if(i%100000==0){ cout << "SetHLTBitTreeKeyRLE entry = " << i << " / " << nEntries << " (" << (int) (100*i/nEntries) << " %)" << endl;}
+    if(i%100000==0){ cout << "SetHLTBitTreeKeyRLE entry = " << i << " / " << nEntries << " (" << (int) (100*i/nEntries) << " %)" << endl;}
   }
 };
 
@@ -113,24 +113,28 @@ void HLT_comp_evtMatch(){
       cout << "NoMatch ::: runLumiEvtToEntryMap[key1] = " << runLumiEvtToEntryMap.count(key1) << ", key1 : " << key1 << ", runLumiEvtToEntryMap[key1] : " << runLumiEvtToEntryMap[key1] << endl;
       continue;}
     else entry = runLumiEvtToEntryMap[key1];
+    if(i==5642823) {cout << "entry : " << i << endl; cout << "key1 = " << key1 << ", runLumiEvtToEntryMap[key1] : " << runLumiEvtToEntryMap[key1] << " entry new = " << entry << endl;}
   
+   
     int itree_=0;
     for(auto& t : TRIGLIST){
       const string tt = t.substr(0, t.size()-1);
       OnlineTR[itree_] ->GetEntry(entry);
       MisCalTR[itree_] ->GetEntry(entry);
-
+  
       int ivar=0;
       for( const auto& var : {"pt", "eta", "phi", "mass"}){     
         for(int it=0;it<valVectOnline[itree_][ivar]->size(); it++){
           histonline[itree_][ivar]->Fill(valVectOnline[itree_][ivar]->at(it));
+        }
+        for(int it=0;it<valVectMisCal[itree_][ivar]->size();it++){
           histmiscal[itree_][ivar]->Fill(valVectMisCal[itree_][ivar]->at(it));
         }
         ivar++;
       }
       itree_++;
     } 
-    if(entry%1000==0){ cout << "Done for entry = " << entry << " / " << NEntries << " (" << (int) (100*entry/NEntries)<< " %)" << endl;}
+    if(entry%10000==0){ cout << "Done for entry first = " << entry << " / " << NEntries << " (" << (int) (100*entry/NEntries)<< " %)" << endl;}
   }
 
     cout << "OKDONE" << endl;
