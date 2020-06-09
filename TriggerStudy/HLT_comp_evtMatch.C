@@ -48,8 +48,9 @@ void makeDir(TFile* f1, const string dir)
 
 void HLT_comp_evtMatch(){
 
-  TFile* f1 = new TFile("/eos/cms/store/group/phys_heavyions/anstahll/HLT2021/TREE/OpenHLTTree_HIMinBias_103X_dataRun2_HLT_NoZS_20200521.root","OPEN");
-  TFile* f2 = new TFile("/eos/cms/store/group/phys_heavyions/anstahll/HLT2021/TREE/OpenHLTTree_HIMinBias_103X_dataRun2_HLT_ForHITestsV3_NoZS_20200521.root","OPEN");
+  cout << "OK" << endl;
+  TFile* f1 = new TFile("OpenHLTTree_HIMinBias_103X_dataRun2_HLT_NoZS_20200521.root","read");
+  TFile* f2 = new TFile("OpenHLTTree_HIMinBias_103X_dataRun2_HLT_ForHITestsV3_NoZS_20200521.root","read");
   TFile* wf = new TFile("output.root","RECREATE");
 
   triglistfile.open(Form("%s",triglist.c_str()));
@@ -79,9 +80,9 @@ void HLT_comp_evtMatch(){
 
       OnlineTR[itree] -> SetBranchAddress(var,&valVectOnline[itree][ivar]);
       MisCalTR[itree] -> SetBranchAddress(var,&valVectMisCal[itree][ivar]);
-      setbins(ivar);
-      histonline[itree][ivar] = new TH1D(Form("h_online_%s_%s",tt.c_str(),var),Form(";%s;",var),nBins[ivar],bins);
-      histmiscal[itree][ivar] = new TH1D(Form("h_miscal_%s_%s",tt.c_str(),var),Form(";%s;",var),nBins[ivar],bins);
+      setbins(tt, ivar);
+      histonline[itree][ivar] = new TH1D(Form("h_online_%s_%s",tt.c_str(),var),Form(";%s;",var),nBins,bins);
+      histmiscal[itree][ivar] = new TH1D(Form("h_miscal_%s_%s",tt.c_str(),var),Form(";%s;",var),nBins,bins);
       ivar++;
     }
     makeDir(wf,tt.c_str());
@@ -113,7 +114,6 @@ void HLT_comp_evtMatch(){
       cout << "NoMatch ::: runLumiEvtToEntryMap[key1] = " << runLumiEvtToEntryMap.count(key1) << ", key1 : " << key1 << ", runLumiEvtToEntryMap[key1] : " << runLumiEvtToEntryMap[key1] << endl;
       continue;}
     else entry = runLumiEvtToEntryMap[key1];
-    if(i==5642823) {cout << "entry : " << i << endl; cout << "key1 = " << key1 << ", runLumiEvtToEntryMap[key1] : " << runLumiEvtToEntryMap[key1] << " entry new = " << entry << endl;}
   
    
     int itree_=0;
@@ -134,7 +134,7 @@ void HLT_comp_evtMatch(){
       }
       itree_++;
     } 
-    if(entry%10000==0){ cout << "Done for entry first = " << entry << " / " << NEntries << " (" << (int) (100*entry/NEntries)<< " %)" << endl;}
+    if(entry%100000==0){ cout << "Done for entry first = " << entry << " / " << NEntries << " (" << (int) (100*entry/NEntries)<< " %)" << endl;}
   }
 
     cout << "OKDONE" << endl;
