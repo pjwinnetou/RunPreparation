@@ -323,7 +323,77 @@ TCanvas *makeHistRatioCanvas(TH1* h0, TH1 *h1, TH1 *h2, double rup, double rdo, 
 
   return c1;
 }
+
+TCanvas *makeGraphRatioCanvas(TGraphAsymmErrors* g0, TGraphAsymmErrors* g1, TGraphAsymmErrors* g2, double rup, double rdo, bool logopt){
+  TCanvas* c1 = new TCanvas(Form("c_%s",g0->GetName()),"",700,700);
+
+  SetGraphStyle(g1, 0, 0);
+  SetGraphStyle(g2, 1, 1);
+  SetGraphStyle(g0, 4, 4);
+  g0->SetMarkerStyle(kFullCircle);
+  g0->GetYaxis()->SetLimits(rdo, rup);
+  g0->GetYaxis()->SetRangeUser(rdo, rup);
+
+  g1->GetXaxis()->SetTitle(" ");
+  g1->GetXaxis()->SetTitleSize(0);
+  g1->GetXaxis()->SetLabelSize(0);
+  g1->GetYaxis()->SetTitleOffset(0.9);
+  g1->GetYaxis()->SetTitleSize(0.07);
+  g1->GetYaxis()->SetLabelSize(0.06);
   
+  g1->GetXaxis()->SetNdivisions(510);
+  g0->GetXaxis()->SetNdivisions(510);
+  
+  g0->GetXaxis()->SetTitleOffset(1.2);
+  g0->GetXaxis()->SetTitleSize(0.1);
+  g0->GetYaxis()->SetTitleOffset(0.62);
+  g0->GetYaxis()->SetTitleSize(0.1);
+  g0->GetXaxis()->SetLabelSize(0.1);
+  g0->GetYaxis()->SetLabelSize(0.085);
+  g0->GetYaxis()->SetNdivisions(505);
+  g0->GetYaxis()->SetTickSize(0.04);
+  g0->GetXaxis()->SetTickSize(0.06);
+
+  TPad* pad1 = new TPad("pad1", "",0, 0.4, 1.0, 1.0); 
+//  pad1->SetRightMargin(0.05);
+  pad1->SetTopMargin(0.090);
+  pad1->SetBottomMargin(0);
+  pad1->SetLeftMargin(0.14);
+  
+
+  TPad* pad2 = new TPad("pad2","",0, 0, 1.0,0.4);
+  pad2->SetTopMargin(0);
+  pad2->SetBottomMargin(0.3);
+  pad2->SetLeftMargin(0.14);
+//  pad2->SetRightMargin(0.05);
+
+  pad1->SetNumber(0);
+  pad2->SetNumber(1);
+
+  c1->cd();
+  pad1->Draw();
+  pad1->cd();
+  if(logopt)pad1->SetLogy();
+  g1->Draw("AP");
+  g2->Draw("P");
+
+  pad1->Update();
+  c1->Update();
+
+  c1->cd();
+  pad2->Draw();
+  pad2->cd();
+  g0->Draw("AP");
+  dashedLine(g0->GetXaxis()->GetXmin(),1,g0->GetXaxis()->GetXmax(),1,1,1);
+  pad2->Update();
+  c1->Modified();
+  c1->Update();
+
+  return c1;
+}
+  
+
+
 
 
 
