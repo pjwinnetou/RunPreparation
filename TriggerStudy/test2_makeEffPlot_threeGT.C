@@ -12,7 +12,7 @@ double getErrorPropaDivide(double a, double da, double b, double db){
 }
 
 
-void test2_makeEffPlot_threeGT(TString tst_name = "HLT_HIL3DoubleMuOpen_v1", bool isPt=true, bool setLogopt = false, double ymax = 1.09, double ymin =0.91){
+void test2_makeEffPlot_threeGT(TString tst_name = "HLT_HIL3DoubleMuOpen_v1", bool isPt=false, bool setLogopt = false, double ymax = 1.09, double ymin =0.91){
 
   TFile* f1 = new TFile("/Users/soohwanlee/RunPreparation/TriggerStudy/outputTree/outputEff_HLT_Track_miscal.root","read");
   TFile* f2 = new TFile("/Users/soohwanlee/RunPreparation/TriggerStudy/outputTree/outputEff_HLT_ECAL_Track_miscal.root","read");
@@ -34,7 +34,11 @@ void test2_makeEffPlot_threeGT(TString tst_name = "HLT_HIL3DoubleMuOpen_v1", boo
 
   TString dirName = "";
     if(isPt){dirName = "eff"+t.first +"_"+ st_name + "_Pt";}
-    else if(!isPt){dirName = "eff"+t.first +"_"+ st_name + "_Eta";}
+    else if(!isPt){
+      	if(strstr(t.first.Data(),"Double")){dirName = "eff"+t.first+"_"+st_name+"_Rapidity";}
+        else dirName = "eff"+t.first +"_"+ st_name + "_Eta";
+      }
+  std::cout << "getting plot " + dirName << std::endl;
 /*  if(strstr(st_name.Data(),"GED")){
     if(isPt){dirName = "effSinglePhoton_" + st_name + "_Pt";}
     else if(!isPt){dirName = "effSinglePhoton_" + st_name + "_Eta";}
