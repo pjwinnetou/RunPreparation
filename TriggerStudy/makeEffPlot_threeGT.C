@@ -59,9 +59,9 @@ void makeEffPlot_threeGT(TString st_name = "HLT_HIL3DoubleMuOpen_v1", bool isPt=
   TGraphAsymmErrors* grtrk = new TGraphAsymmErrors();
   TGraphAsymmErrors* grtrkcal = new TGraphAsymmErrors();
         
-  double px,py,px_,py_,ex,eyh,eyl,ex_,eyh_,eyl_;
   for(int ip=0; ip<gonl->GetN(); ip++)
   {
+    double px,py,px_,py_,ex,eyh,eyl,ex_,eyh_,eyl_;
     gonl->GetPoint(ip,px,py);
     gtrk->GetPoint(ip,px_,py_);
 
@@ -82,6 +82,7 @@ void makeEffPlot_threeGT(TString st_name = "HLT_HIL3DoubleMuOpen_v1", bool isPt=
 
   for(int ip=0; ip<gonl->GetN(); ip++)
   {
+    double px,py,px_,py_,ex,eyh,eyl,ex_,eyh_,eyl_;
     gonl->GetPoint(ip,px,py);
     gtrkcal->GetPoint(ip,px_,py_);
 
@@ -99,9 +100,10 @@ void makeEffPlot_threeGT(TString st_name = "HLT_HIL3DoubleMuOpen_v1", bool isPt=
     grtrkcal->SetPoint(ip,px,pr);
     grtrkcal->SetPointError(ip,ex,ex,eyl_r,eyh_r);
   }
-  
-  SetGraphStyle(grtrkcal, 1, 1);
-  SetGraphStyle(grtrk, 2, 2);
+  SetGraphStyle(grtrk,1, 1);
+  SetGraphStyle(grtrkcal, 2, 2);
+  grtrk->SetMarkerSize(0.8);
+  grtrkcal->SetMarkerSize(1.2);
 
   TCanvas* c1 = new TCanvas("c1","",700,700);
   c1->cd();
@@ -165,6 +167,7 @@ void makeEffPlot_threeGT(TString st_name = "HLT_HIL3DoubleMuOpen_v1", bool isPt=
   pad2->Draw();
   pad2->cd();
   grtrk->Draw("AP");
+  grtrkcal->Draw("P");
   dashedLine(gonl->GetXaxis()->GetXmin(),1,gonl->GetXaxis()->GetXmax(),1,1,1);
 //  grtrk->SetName(Form("%s",st_name.c_str())); 
   pad2->Update();
